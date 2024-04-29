@@ -1,6 +1,6 @@
 FROM python:3.9-slim
 
-# Instalar dependencias de sistema necesarias para mysqlclient
+# Instalar dependencias de sistema necesarias para mysqlclient y pruebas
 RUN apt-get update && apt-get install -y \
     gcc \
     default-libmysqlclient-dev \
@@ -15,11 +15,16 @@ WORKDIR /code
 # Copiar solo el archivo requirements.txt inicialmente
 COPY ./requirements.txt /code/
 
-# Instalar dependencias de Python
-RUN pip install --no-cache-dir --upgrade -r requirements.txt
+# Instalar dependencias de Python, incluyendo pytest y herramientas de cobertura
+RUN pip install --no-cache-dir --upgrade -r requirements.txt \
+    && pip install pytest pytest-cov
 
 # Copiar el resto del código de la aplicación
 COPY ./app /code/app
+COPY ./test /code/test  
 
-# Comando para ejecutar la aplicación usando Uvicorn
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+ENV PYTHONPATH=/code
+
+
+# Comando para ejecutar las pruebas usando pytest
+CMD ["pytest", "/code/test"]

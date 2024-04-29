@@ -1,11 +1,18 @@
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from app.core.config import engine, Base
-from app.api.endpoints import router  # Mueve la importación aquí para evitar duplicados
+from app.api.endpoints import router as api_router 
+from app.api.auth import router as auth_router  
+from app.api.users import router as users_router    
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = FastAPI()
 
-app.include_router(router)  # Asegúrate de que esto solo aparezca una vez
+app.include_router(api_router)
+app.include_router(auth_router)
+app.include_router(users_router)
 
 @app.on_event("startup")
 def startup_event():

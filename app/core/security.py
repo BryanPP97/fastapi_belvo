@@ -1,26 +1,16 @@
-from jose import jwt, JWTError
-from datetime import datetime, timedelta
+from passlib.context import CryptContext
 
-SECRET_KEY = "your_secret_key"
-ALGORITHM = "HS256"
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-def create_access_token(data: dict):
-    to_encode = data.copy()
-    expire = datetime.utcnow() + timedelta(minutes=15)
-    to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
+def hash_password(password: str) -> str:
+    """
+    Hash the password using Bcrypt.
+    """
+    return pwd_context.hash(password)
 
-def verify_token(token: str, credentials_exception, db):
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        user_id: str = payload.get("sub")
-        if user_id is None:
-            raise credentials_exception
-        token_data = schemas.TokenData(user_id=user_id)
-    except JWTError:
-        raise credentials_exception
-    user = db.get_user(user_id=token_data.user_id)
-    if user is None:
-        raise credentials_exception
-    return user
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    """
+    Verify a plain password with the hashed version.
+    """
+    return pwd_context.verify(plain_password, hashed_password)
+

@@ -15,11 +15,12 @@ def get_belvo_client():
         "sandbox"
     )
 
+
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
-class Config:
-        orm_mode = True
+# Clave secreta para firmar tokens JWT
+SECRET_KEY = os.getenv("SECRET_KEY")
