@@ -8,4 +8,4 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String(255), unique=True, index=True)
     password = Column(String(255))
-    links = relationship("Link", back_populates="user") 
+    #links = relationship("Link", back_populates="user") 

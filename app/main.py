@@ -18,6 +18,7 @@ app.include_router(users_router)
 def startup_event():
     Base.metadata.create_all(bind=engine)  # Inicialización de la base de datos
 
+# Función como manejador de excepciones para todas las excepciones no capturadas explícitamente
 @app.exception_handler(Exception)
 def global_exception_handler(request, exc):
     return JSONResponse(

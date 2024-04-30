@@ -49,16 +49,15 @@ def list_transactions(
         db.rollback()
         raise HTTPException(status_code=400, detail=f"Error processing transactions: {str(e)}")
 
-    return [TransactionResponse.from_orm(txn) for txn in transactions]
+    return [TransactionResponse.from_attributes(txn) for txn in transactions]
 
 
-@router.post("/links", response_model=LinkResponse)  
+@router.post("/links", response_model=LinkResponse)
 def create_link(
     link_data: LinkCreate = Body(...),
     db: Session = Depends(get_db),
-    token: str = Depends(decode_access_token)  
+    token: str = Depends(decode_access_token)
 ):
-    
     if not token:
         raise HTTPException(status_code=401, detail="Token de acceso no proporcionado o no válido")
     
@@ -67,31 +66,27 @@ def create_link(
         response_data = belvo_client.Links.create(
             institution=link_data.institution,
             username=link_data.username,
-            password=link_data.password,
-            username2=link_data.username2,
-            username3=link_data.username3,
-            password2=link_data.password2,
-            token=link_data.token,
-            access_mode=link_data.access_mode,
-            username_type=link_data.username_type
+            password=link_data.password
         )
         
-        # Crear instancia del modelo SQLAlchemy
+        # Crear instancia del modelo SQLAlchemy con todos los campos necesarios
         new_link = Link(
+            belvo_id=response_data['id'],
             institution=link_data.institution,
             username=link_data.username,
+            access_mode=response_data.get("access_mode"),
+            status=response_data.get("status"),
+            refresh_rate=response_data.get("refresh_rate"),
             external_id=response_data.get("external_id"),
-            access_mode=link_data.access_mode,
-            credentials_storage=link_data.credentials_storage,
-            stale_in=link_data.stale_in
-            
+            institution_user_id=response_data.get("institution_user_id"),
+            credentials_storage=response_data.get("credentials_storage"),
+            stale_in=response_data.get("stale_in")
         )
         
         db.add(new_link)
         db.commit()
         db.refresh(new_link)
 
-        
         return LinkResponse.from_orm(new_link)
     except Exception as e:
         db.rollback()

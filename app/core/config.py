@@ -16,10 +16,10 @@ def get_belvo_client():
     )
 
 
-DATABASE_URL = os.getenv("DATABASE_URL")
+DATABASE_URL = os.getenv("DATABASE_URL") # Conexión a base de datos
 
-engine = create_engine(DATABASE_URL)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+engine = create_engine(DATABASE_URL) # motor de la base de datos
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine) #control sobre las transacciones en la base de datos
 Base = declarative_base()
 
 # Clave secreta para firmar tokens JWT

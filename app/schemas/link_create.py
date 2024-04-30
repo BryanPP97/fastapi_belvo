@@ -1,30 +1,25 @@
-from pydantic import BaseModel, Field
-from typing import Optional, List
+from pydantic import BaseModel, UUID4
 from datetime import datetime
+from typing import Optional, List
+
 
 class LinkCreate(BaseModel):
     institution: str
     username: str
-    password: Optional[str] = None
-    external_id: Optional[str] = None
-    username2: Optional[str] = None
-    username3: Optional[str] = None
-    password2: Optional[str] = None
-    token: Optional[str] = None
-    access_mode: str = Field(default="recurrent")
-    username_type: Optional[str] = None
+    password: str
+
 
 class LinkResponse(BaseModel):
-    id: str
+    belvo_id: str
     institution: str
-    access_mode: str
-    last_accessed_at: Optional[datetime]
-    created_at: datetime
+    access_mode: Optional[str] = "recurrent"
+    status: Optional[str] = "valid"
+    refresh_rate: Optional[str] = "7d"
     external_id: Optional[str]
     institution_user_id: Optional[str]
-    status: str
-    created_by: Optional[str]
-    username_type: Optional[str]
+    credentials_storage: Optional[str]
+    stale_in: Optional[str]
+    fetch_resources: Optional[List[str]] = []
 
     class Config:
-        orm_mode = True
+        from_attributes = True

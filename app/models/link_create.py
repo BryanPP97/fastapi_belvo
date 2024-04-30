@@ -1,20 +1,22 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, String, DateTime, Integer
+from sqlalchemy.dialects.postgresql import UUID
+import uuid
 from app.core.config import Base
+from sqlalchemy.dialects.mysql import BINARY
 
 class Link(Base):
     __tablename__ = 'links'
     
-    id = Column(Integer, primary_key=True, index=True)
-    institution = Column(String(255))
-    external_id = Column(String(255), nullable=True)
-    access_mode = Column(String(50), nullable=False, default="recurrent")
-    stale_in = Column(String(50), nullable=True)
-    username_type = Column(String(50), nullable=True)
-    last_accessed_at = Column(String(50), nullable=True)
-    created_at = Column(String(50), nullable=True)
-    status = Column(String(50), nullable=True)
-    created_by = Column(String(255), nullable=True)
-    refresh_rate = Column(String(50), nullable=True)
-    user_id = Column(Integer, ForeignKey('users.id'))   
-    user = relationship("User", back_populates="links")
+    id = Column(Integer, primary_key=True)  # ID interno como primary key
+    belvo_id = Column(String(36), unique=True, nullable=False)
+    institution = Column(String(255), nullable=False)
+    username = Column(String(255), nullable=False)
+    # Considera eliminar la columna de contraseña o asegúrate de que se almacene de forma segura
+    # Agregar más campos conforme los necesitas de la respuesta de Belvo
+    access_mode = Column(String(50))
+    status = Column(String(50))
+    refresh_rate = Column(String(50))
+    external_id = Column(String(255))
+    institution_user_id = Column(String(255))
+    credentials_storage = Column(String(50))
+    stale_in = Column(String(50))
