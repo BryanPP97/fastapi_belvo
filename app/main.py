@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from app.core.config import engine, Base
-from app.api.endpoints import router as api_router 
+from app.api.linkid_endpoint import router as linkid_router 
+from app.api.transactions_endpoint import router as transaction_router 
 from app.api.auth import router as auth_router  
 from app.api.users import router as users_router    
 from dotenv import load_dotenv
@@ -10,9 +11,10 @@ load_dotenv()
 
 app = FastAPI()
 
-app.include_router(api_router)
 app.include_router(auth_router)
+app.include_router(linkid_router)
 app.include_router(users_router)
+app.include_router(transaction_router)
 
 @app.on_event("startup")
 def startup_event():

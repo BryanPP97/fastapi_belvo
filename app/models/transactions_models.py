@@ -1,15 +1,24 @@
-from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer, String, Float, DateTime, Date
+from sqlalchemy.sql import func
 from app.core.config import Base
 
 class Transaction(Base):
     __tablename__ = 'transactions'
     
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True)
+    transaction_id = Column(String(255), index=True)
     link_id = Column(String(255), index=True)
     account_id = Column(String(255), index=True)
+    account_name = Column(String(255), index=True)
+    account_type = Column(String(255), index=True)
+    transaction_category = Column(String(255))
+    transaction_type = Column(String(50))
     amount = Column(Float)
-    currency = Column(String(3))
-    collected_at = Column(DateTime)
     status = Column(String(50))
-    type = Column(String(50))
+    currency = Column(String(10))
+    description = Column(String(255))
+    
+    
+    
+    
+    

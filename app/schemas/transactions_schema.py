@@ -14,14 +14,33 @@ class TransactionFilter(BaseModel):
     page_size: Optional[int] = 100
 
 class TransactionResponse(BaseModel):
-    id: int
+    transaction_id: str
     link_id: str
     account_id: Optional[str]
+    account_name: str
+    account_type: str
+    transaction_category: Optional[str]
+    transaction_type: str
+    amount: float
+    status: Optional[str]
+    currency: str
+    description: str
+
+    
+    class Config:
+        from_attributes = True
+
+class Transaction(BaseModel):
+    id: str
+    transaction_category: str
     amount: float
     currency: str
-    collected_at: datetime
-    status: Optional[str]
-    type: Optional[str]
 
-    class Config:
-        from_attributes = True 
+class TransactionsPage(BaseModel):
+    count: int
+    next: Optional[str]
+    previous: Optional[str]
+    results: List[Transaction]
+
+class TransactionSummary(BaseModel):
+    totals_by_category: dict
