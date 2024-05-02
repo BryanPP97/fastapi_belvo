@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Body
 from sqlalchemy.orm import Session
 from app.core.auth import decode_access_token
-from app.models.link_create import Link
+from app.models.link_create_models import Link
 from app.schemas.link_create import LinkCreate, LinkResponse
 from app.api.dependencies import get_db
 from app.core.config import get_belvo_client

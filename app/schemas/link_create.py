@@ -13,6 +13,7 @@ class LinkResponse(BaseModel):
     belvo_id: str
     institution: str
     access_mode: Optional[str] = "recurrent"
+    username: str
     status: Optional[str] = "valid"
     refresh_rate: Optional[str] = "7d"
     external_id: Optional[str]

@@ -24,7 +24,7 @@ class TransactionResponse(BaseModel):
     amount: float
     status: Optional[str]
     currency: str
-    description: str
+    description: Optional[str]
 
     
     class Config:

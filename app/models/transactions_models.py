@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, DateTime, Date
+from sqlalchemy import Column, Integer, String, Float, ForeignKey
 from sqlalchemy.sql import func
 from app.core.config import Base
 
@@ -17,6 +17,8 @@ class Transaction(Base):
     status = Column(String(50))
     currency = Column(String(10))
     description = Column(String(255))
+    username = Column(String(255), ForeignKey('users.username'))
+
     
     
     
